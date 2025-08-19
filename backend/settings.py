@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
     #created apps
     'User',
+    'products',
 ]
 
 AUTH_USER_MODEL='User.User'
@@ -64,6 +65,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'backend.urls'
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'uploads'
 
 TEMPLATES = [
     {
@@ -154,4 +159,4 @@ ACCOUNT_UNIQUE_EMAIL = True
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USERNAME_REQUIRED = False
-
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
