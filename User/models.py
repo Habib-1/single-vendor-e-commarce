@@ -1,6 +1,13 @@
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser,PermissionsMixin
 from django.db import models
 
+class BaseModel(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract=True
 
 
 class UserManager(BaseUserManager):
@@ -38,7 +45,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
     
-class User(AbstractBaseUser,PermissionsMixin):
+class User(AbstractBaseUser,PermissionsMixin,BaseModel):
     name = models.CharField(max_length=150, blank=False)
     email = models.EmailField(verbose_name='email', max_length=150, unique=True)
     phone = models.CharField(max_length=20,unique=True, blank=False)
@@ -57,3 +64,17 @@ class User(AbstractBaseUser,PermissionsMixin):
     def __str__(self):
         return self.email
     
+
+class Customers(BaseModel):
+    user=models.OneToOneField(User,on_delete=models.CASCADE,null=False,related_name='customer')
+    address=models.TextField(blank=True,null=True)
+    city=models.CharField(max_length=100,blank=True,null=True)
+    state=models.CharField(max_length=100, blank=True,null=True)
+    postal_code=models.CharField(max_length=20,blank=True,null=True)
+    country=models.CharField(max_length=100,default="Bangladesh")
+
+    class Meta:
+        verbose_name_plural = 'Customers'
+
+    def __str__(self):
+        return self.user.email
